@@ -15,7 +15,6 @@
     libreoffice-qt
     signal-desktop
     spotify
-    vscode
   ];
 
   programs.bash = {
@@ -29,6 +28,14 @@
     enable = true;
     enableBashIntegration = true;
     nix-direnv.enable = true;
+  };
+
+  programs.vscode = {
+    enable = true;
+    extensions = with pkgs.vscode-extensions; [
+      jnoortheen.nix-ide
+      ms-vscode.cpptools
+    ];
   };
 
   programs.home-manager.enable = true;
