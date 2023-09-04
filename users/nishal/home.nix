@@ -18,6 +18,20 @@
     vscode
   ];
 
+  programs.bash = {
+    enable = true;
+    initExtra = ''
+      eval "$(direnv hook bash)"
+    '';
+  };
+
+  programs.direnv = {
+    enable = true;
+    enableBashIntegration = true;
+    nix-direnv.enable = true;
+  };
+
   programs.home-manager.enable = true;
+
   home.stateVersion = "23.05";
 }
