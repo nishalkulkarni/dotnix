@@ -53,7 +53,6 @@
             pkg-config
             polkit.dev
             samba.dev
-            tree
             udisks.dev
             upower.dev
             wrapGAppsHook

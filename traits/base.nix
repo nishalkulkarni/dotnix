@@ -21,10 +21,12 @@
     };
 
     environment.systemPackages = with pkgs; [
+      curl
       git
       htop
-      pciutils
       neofetch
+      pciutils
+      tree
       vim
       wget
     ];
