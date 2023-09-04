@@ -44,5 +44,14 @@
     #   enableSSHSupport = true;
     # };
 
+    # Enable Flatpaks
+    services.flatpak.enable = true;
+
+    environment.systemPackages = with pkgs; [
+      ffmpeg
+      handbrake
+      vlc
+    ];
+
   };
 }
