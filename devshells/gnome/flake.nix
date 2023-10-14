@@ -21,6 +21,7 @@
             colord.dev
             colord-gtk4.dev
             curl.dev
+            dfeet
             flex
             gcr.dev
             glib.dev
@@ -55,6 +56,7 @@
             samba.dev
             udisks.dev
             upower.dev
+            valgrind
             wrapGAppsHook
             xorg.libXcursor
             xorg.libXdamage
