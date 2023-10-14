@@ -11,6 +11,7 @@
 
     environment.systemPackages = with pkgs; [
       gnomeExtensions.appindicator
+      gnome.dconf-editor
       gnome.gnome-tweaks
       gnome.gnome-software
     ];

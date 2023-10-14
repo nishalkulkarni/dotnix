@@ -22,6 +22,8 @@ sudo nixos-rebuild switch --flake .#legion
 
 ### Update and Upgrade
 ```bash
+sudo nix flake update
+sudo nixos-rebuild switch --flake .#legion
 nix-channel --update
 sudo nixos-rebuild --upgrade
 ```

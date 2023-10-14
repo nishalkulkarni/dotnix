@@ -3,7 +3,7 @@
 {
   config = {
     # Set your time zone.
-    time.timeZone = "Asia/Kolkata";
+    time.timeZone = "Europe/Berlin";
     time.hardwareClockInLocalTime = true;
 
     # Select internationalisation properties.

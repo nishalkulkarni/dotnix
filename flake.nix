@@ -31,6 +31,7 @@
                     meson
                     ninja
                     python311
+                    gdb
                 ];
 
                 shellHook = ''
@@ -57,6 +58,7 @@
                     platforms.legion
                     traits.workstation
                     traits.gnome
+                    traits.gamestation
                     users.nishal
                 ];
             };
@@ -66,6 +68,7 @@
         nixosModules = {
             platforms.legion = ./platforms/legion.nix;
             traits.base = ./traits/base.nix;
+            traits.gamestation = ./traits/gamestation.nix;
             traits.gnome = ./traits/gnome.nix;
             traits.workstation = ./traits/workstation.nix;
             users.nishal = ./users/nishal;
