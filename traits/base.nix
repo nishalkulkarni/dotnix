@@ -26,6 +26,7 @@
       htop
       neofetch
       pciutils
+      tmux
       tree
       vim
       wget

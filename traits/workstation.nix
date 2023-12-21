@@ -48,9 +48,20 @@
     services.flatpak.enable = true;
 
     environment.systemPackages = with pkgs; [
+      discord
+      element-desktop
       ffmpeg
+      firefox
+      gimp
+      google-chrome
       handbrake
+      hunspell
+      hunspellDicts.en_US
+      libreoffice-qt
+      signal-desktop
+      spotify
       vlc
+      vscode
     ];
 
   };

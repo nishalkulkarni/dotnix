@@ -8,7 +8,10 @@
       home = "/home/nishal";
       createHome = true;
       description = "Nishal Kulkarni";
-      extraGroups = [ "networkmanager" "wheel" ];
+      extraGroups = [ "networkmanager" "wheel" "docker" ];
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBrKChenpivEx2Gc1TAHYquIpFLrMd7tLzrZifFpwPle"
+      ];
     };
   };
 }

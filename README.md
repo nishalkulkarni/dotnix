@@ -5,6 +5,7 @@ NixOS System Configuration as a Flake.
 
 ### Legion
 Lenovo Legion Y540 Laptop
+
 #### Specification
 - Intel Core i7-9750H
 - NVIDIA GeForce GTX 1660 Ti
@@ -17,6 +18,19 @@ Lenovo Legion Y540 Laptop
 sudo nixos-rebuild switch --flake .#legion
 ```
 
+### Gisela
+Cloud Arm VPS
+
+#### Specification
+- Shared vCPU 2 Ampere Cores
+- 4 GB RAM
+- 40 GB NVMe SSD
+- System: aarch64-linux
+
+#### Build
+```bash
+sudo nixos-rebuild switch --flake .#gisela
+```
 
 ## Helper Commands
 
@@ -34,3 +48,11 @@ nix-collect-garbage
 nix-env --delete-generations 14d
 nix-store --gc
 ```
+
+## TODO
+- Refactor how home-manager packages are installed. Currently GUI applications are installed for all systems (not-desirable).
+- Add docker support.
+- Setup git using home-manager.
+- Add support for multiple architectures in devshells.
+- Create a separate mediastation trait. Don't install those packages in workstation.
+- Move home-manager config options out of base.nix
