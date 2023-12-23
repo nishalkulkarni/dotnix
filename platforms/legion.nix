@@ -1,26 +1,25 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports = [ 
-    (modulesPath + "/installer/scan/not-detected.nix")
-  ];
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   config = {
-    boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
+    boot.initrd.availableKernelModules =
+      [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
     boot.initrd.kernelModules = [ ];
     boot.kernelModules = [ "kvm-intel" ];
     boot.extraModulePackages = [ ];
     boot.supportedFilesystems = [ "ntfs" ];
 
-    fileSystems."/" =
-      { device = "/dev/disk/by-uuid/22c82bfc-99b2-4437-b1b5-516015c662e0";
-        fsType = "ext4";
-      };
+    fileSystems."/" = {
+      device = "/dev/disk/by-uuid/22c82bfc-99b2-4437-b1b5-516015c662e0";
+      fsType = "ext4";
+    };
 
-    fileSystems."/boot" =
-      { device = "/dev/disk/by-uuid/E0DF-0754";
-        fsType = "vfat";
-      };
+    fileSystems."/boot" = {
+      device = "/dev/disk/by-uuid/E0DF-0754";
+      fsType = "vfat";
+    };
 
     swapDevices = [ ];
 
@@ -28,9 +27,7 @@
     hardware.bluetooth = {
       enable = true;
       settings = {
-        General = {
-          FastConnectable = true;
-        };
+        General = { FastConnectable = true; };
         Policy = {
           ReconnectAttempts = 7;
           ReconnectIntervals = "1,2,3,4,8";
@@ -38,7 +35,8 @@
       };
     };
 
-    hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    hardware.cpu.intel.updateMicrocode =
+      lib.mkDefault config.hardware.enableRedistributableFirmware;
 
     # Make sure opengl is enabled
     hardware.opengl = {
@@ -49,12 +47,10 @@
 
     # NVIDIA drivers are unfree.
     nixpkgs.config.allowUnfreePredicate = pkg:
-      builtins.elem (lib.getName pkg) [
-        "nvidia-x11"
-      ];
+      builtins.elem (lib.getName pkg) [ "nvidia-x11" ];
 
     # Tell Xorg to use the nvidia driver
-    services.xserver.videoDrivers = ["nvidia"];
+    services.xserver.videoDrivers = [ "nvidia" ];
 
     hardware.nvidia = {
 
