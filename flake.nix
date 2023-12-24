@@ -53,6 +53,7 @@
           ];
         };
       in with self.nixosModules; {
+        # Lenovo Legion Y540
         legion = nixpkgs.lib.nixosSystem {
           inherit (x86_64Base) system;
           modules = x86_64Base.modules ++ [
@@ -63,17 +64,39 @@
             users.nishal
           ];
         };
+        # Cloud Arm VPS
         gisela = nixpkgs.lib.nixosSystem {
           inherit (aarch64Base) system;
           modules = aarch64Base.modules
             ++ [ platforms.gisela traits.vps traits.nextcloud users.nishal ];
         };
-
+        # Raspberry Pi Image
+        rPiImage = nixpkgs.lib.nixosSystem {
+          inherit (aarch64Base) system;
+          modules = aarch64Base.modules ++ [
+            platforms.rpi
+            users.nishal
+            {
+              config = {
+                nixpkgs.config.allowUnsupportedSystem = true;
+                nixpkgs.hostPlatform.system = "aarch64-linux";
+                nixpkgs.buildPlatform.system = "aarch64-linux";
+                # Access temporary wireless network for headless install
+                # Not safe
+                networking.wireless.networks = {
+                  nixTmpWifi = { };
+                };
+              };
+            }
+          ];
+        };
       };
 
       nixosModules = {
-        platforms.legion = ./platforms/legion.nix;
         platforms.gisela = ./platforms/gisela.nix;
+        platforms.legion = ./platforms/legion.nix;
+        platforms.rpi =
+          "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix";
         traits.base = ./traits/base.nix;
         traits.gamestation = ./traits/gamestation.nix;
         traits.gnome = ./traits/gnome.nix;

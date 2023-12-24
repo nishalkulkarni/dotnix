@@ -32,6 +32,23 @@ Cloud Arm VPS
 sudo nixos-rebuild switch --flake .#gisela
 ```
 
+### Isar
+Raspberry Pi 3 Model B+
+
+#### Specification
+- Broadcom BCM2837B0, Cortex-A53 (ARMv8) 64-bit SoC
+- 1 GB LPDDR2 SDRAM
+- 16 GB SD Card
+- System: aarch64-linux
+
+#### Build
+```bash
+# Create installer image
+nix build .#nixosConfigurations.rPiImage.config.system.build.sdImage
+# Setup RPi
+sudo nixos-rebuild switch --flake .#isar
+```
+
 ## Helper Commands
 
 ### Update and Upgrade
