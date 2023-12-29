@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   config = {
@@ -30,5 +30,17 @@
     # Setup passwordless sudo
     security.sudo.wheelNeedsPassword = false;
 
+    # Storage
+    environment.systemPackages = with pkgs; [ cifs-utils ];
+    fileSystems."/mnt/storage" = {
+      device = builtins.readFile config.sops.secrets.cloud_backup_device.path;
+      fsType = "cifs";
+      options = let
+        # this line prevents hanging on network split
+        automount_opts =
+          "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+
+      in [ "${automount_opts},credentials=/etc/nixos/smb-secrets,rw,mfsymlinks,seal,uid=33,gid=0,file_mode=0770,dir_mode=0770" ];
+    };
   };
 }

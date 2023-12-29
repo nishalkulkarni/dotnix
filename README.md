@@ -29,7 +29,7 @@ Cloud Arm VPS
 
 #### Build
 ```bash
-sudo nixos-rebuild switch --flake .#gisela
+sudo nixos-rebuild switch --flake .#gisela --impure
 ```
 
 ### Isar
