@@ -32,6 +32,12 @@
       wget
     ];
 
+    sops = {
+      defaultSopsFile = ../secrets/secrets.yaml;
+      age.keyFile = "/var/lib/sops/age/keys.txt";
+      secrets = { cloud_backup_device = { }; };
+    };
+
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
 

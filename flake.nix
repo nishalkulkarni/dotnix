@@ -7,9 +7,10 @@
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix.url = "github:Mic92/sops-nix";
   };
 
-  outputs = { self, nixpkgs, home-manager }:
+  outputs = { self, nixpkgs, home-manager, sops-nix }:
     let
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
       forAllSystems = f:
@@ -41,6 +42,7 @@
           modules = with self.nixosModules; [
             ({ config = { nix.registry.nixpkgs.flake = nixpkgs; }; })
             home-manager.nixosModules.home-manager
+            sops-nix.nixosModules.sops
             traits.base
           ];
         };
@@ -49,6 +51,7 @@
           modules = with self.nixosModules; [
             ({ config = { nix.registry.nixpkgs.flake = nixpkgs; }; })
             home-manager.nixosModules.home-manager
+            sops-nix.nixosModules.sops
             traits.base
           ];
         };

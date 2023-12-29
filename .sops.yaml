@@ -1,0 +1,9 @@
+keys:
+  - &primary age19a57hmg32uw6f2akf4glrm37vr2cs2wznl8p28pashaqxzf6dfvqe6t4sn
+  - &gisela age1um5tzv0nlc2yq8c249na67unfqxc9ppsx8qwyxc4aqk2mfdguf4sp30gt3
+creation_rules:
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+    - age:
+      - *primary
+      - *gisela
