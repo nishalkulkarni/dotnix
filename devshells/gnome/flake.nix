@@ -62,7 +62,7 @@
           curl.dev
           dfeet
           flex
-          gcr.dev
+          gcr_4.dev
           gnome-desktop.dev
           gnome-online-accounts.dev
           gnome.adwaita-icon-theme

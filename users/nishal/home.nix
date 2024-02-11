@@ -8,6 +8,7 @@
     enable = true;
     initExtra = ''
       eval "$(direnv hook bash)"
+      export PATH="$PATH:$HOME/Projects/scripts"
     '';
   };
 
