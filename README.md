@@ -53,15 +53,17 @@ sudo nixos-rebuild switch --flake .#isar
 
 ### Update and Upgrade
 ```bash
+# The flake way
 sudo nix flake update
 sudo nixos-rebuild switch --flake .#legion
-nix-channel --update
-sudo nixos-rebuild --upgrade
+# Regular way (unused)
+sudo nix-channel --update
+sudo nixos-rebuild switch --upgrade
 ```
 
 ### Garbage Collection
 ```bash
-nix-collect-garbage
+sudo nix-collect-garbage --delete-older-than 3d
 nix-env --delete-generations 14d
 nix-store --gc
 ```

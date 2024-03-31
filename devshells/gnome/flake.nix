@@ -9,6 +9,92 @@
       pkgs = import nixpkgs { inherit system; };
       buildDocs = pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform
         && !pkgs.stdenv.hostPlatform.isStatic;
+
+      # Custom gtk4
+      custom_gtk4 = pkgs.gtk4.overrideAttrs (oldAttrs: rec {
+        pname = "gtk";
+        version = "4.13.4";
+
+        src = pkgs.fetchurl {
+          url = "https://gitlab.gnome.org/GNOME/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
+          sha256 = "sbt1PwJU2L78g+tzRxDcpi/73FO6QnT718bicD8Ec1s=";
+        };
+
+        buildInputs = with pkgs; [
+          libxkbcommon
+          libpng
+          libdrm
+          libtiff
+          libjpeg
+          libepoxy
+          isocodes
+          gst_all_1.gst-plugins-base
+          gst_all_1.gst-plugins-bad
+          fribidi
+          harfbuzz
+          xorg.libICE
+          xorg.libSM
+          xorg.libXcursor
+          xorg.libXdamage
+          xorg.libXi
+          xorg.libXrandr
+          xorg.libXrender
+          tracker
+          libGL
+          wayland
+          wayland-protocols
+          xorg.libXinerama
+          cups
+          libexecinfo
+        ];
+      });
+
+      # Custom gsettings-desktop-schemas
+      custom_gds = pkgs.gsettings-desktop-schemas.overrideAttrs (oldAttrs: rec {
+        pname = "gsettings-desktop-schemas";
+        version = "46.0";
+
+        src = pkgs.fetchurl {
+          url = "mirror://gnome/sources/${pname}/${nixpkgs.lib.versions.major version}/${pname}-${version}.tar.xz";
+          sha256 = "STpGoRYbY4jVeqcvYyp5zpbELV/70dCwD0luxYdvhXU=";
+        };
+      });
+
+      # Custom gnome-online-accounts version
+      custom_goa = pkgs.gnome-online-accounts.overrideAttrs (oldAttrs: rec {
+        pname = "gnome-online-accounts";
+        version = "3.49.1";
+        src = pkgs.fetchurl {
+          url = "mirror://gnome/sources/${pname}/${
+              nixpkgs.lib.versions.majorMinor version
+            }/${pname}-${version}.tar.xz";
+          sha256 = "7dd9be915bc0c7ac84edf1425f8046bb323757913e7eb7a5ab8cfcd39cc50833";
+        };
+
+        outputs = [ "out" "dev" ];
+
+        mesonFlags = [
+          "-Dfedora=false" # not useful in NixOS or for NixOS users.
+        ];
+
+        buildInputs = with pkgs; [
+          gcr_4
+          glib
+          glib-networking
+          custom_gtk4
+          libadwaita.dev
+          gvfs # OwnCloud, Google Drive
+          icu
+          json-glib
+          libkrb5
+          librest_1_0
+          libxml2
+          libsecret
+          libsoup_3
+        ];
+      });
+
+      # Custom glib version
       newglib = pkgs.glib.overrideAttrs (oldAttrs: rec {
         version = "2.76.6";
         src = pkgs.fetchurl {
@@ -53,29 +139,31 @@
       x86_64-linux.default = pkgs.mkShell {
 
         packages = with pkgs; [
-          newglib.dev
+          custom_gds
+          custom_gtk4.dev
+          glib.dev
+          custom_goa.dev
           accountsservice.dev
           appstream.dev
           bison
           colord.dev
           colord-gtk4.dev
           curl.dev
-          dfeet
+          d-spy
           flex
           gcr_4.dev
           gnome-desktop.dev
-          gnome-online-accounts.dev
           gnome.adwaita-icon-theme
           gnome.gnome-bluetooth.dev
           gnome.gnome-settings-daemon
+          gnome-tecla
           gsound
           gst_all_1.gstreamer.dev
           gst_all_1.gst-plugins-base.dev
           gst_all_1.gst-plugins-bad.dev
-          gtk4.dev
           ibus.dev
           json-glib.dev
-          libadwaita
+          libadwaita.dev
           libepoxy
           libgtop.dev
           libgudev.dev
@@ -94,6 +182,7 @@
           pkg-config
           polkit.dev
           samba.dev
+          sassc
           udisks.dev
           upower.dev
           valgrind
