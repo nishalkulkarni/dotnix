@@ -95,13 +95,13 @@
       });
 
       # Custom glib version
-      newglib = pkgs.glib.overrideAttrs (oldAttrs: rec {
-        version = "2.76.6";
+      custom_glib = pkgs.glib.overrideAttrs (oldAttrs: rec {
+        version = "2.79.0";
         src = pkgs.fetchurl {
           url = "mirror://gnome/sources/glib/${
               nixpkgs.lib.versions.majorMinor version
             }/glib-${version}.tar.xz";
-          sha256 = "ETauaYfcu2TgvjGXqAGQUg96yrgeK/uTfchcEciqnwQ=";
+          sha256 = "1+veVQX1xHQaBP/jL2knvRZbE8qqvhjpYt3FjIEfhMk=";
         };
 
         postInstall = ''
@@ -152,6 +152,7 @@
           d-spy
           flex
           gcr_4.dev
+          gexiv2.dev
           gnome-desktop.dev
           gnome.adwaita-icon-theme
           gnome.gnome-bluetooth.dev

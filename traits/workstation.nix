@@ -48,6 +48,7 @@
     services.flatpak.enable = true;
 
     environment.systemPackages = with pkgs; [
+      anki-bin
       discord
       element-desktop
       ffmpeg
