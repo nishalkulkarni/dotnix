@@ -12,9 +12,25 @@
     '';
   };
 
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    syntaxHighlighting.enable = true;
+
+    initExtra = ''
+      export PATH="$PATH:$HOME/Projects/scripts"
+    '';
+
+    oh-my-zsh = {
+      enable = true;
+      plugins = [ "git" "direnv" ];
+      theme = "robbyrussell";
+    };
+  };
+
   programs.direnv = {
     enable = true;
-    enableBashIntegration = true;
+    enableZshIntegration = true;
     nix-direnv.enable = true;
   };
 

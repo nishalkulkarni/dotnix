@@ -32,6 +32,10 @@
       wget
     ];
 
+    # Zsh for all users
+    programs.zsh.enable = true; # Redundant but needed
+    users.defaultUserShell = pkgs.zsh;
+
     sops = {
       defaultSopsFile = ../secrets/secrets.yaml;
       age.keyFile = "/var/lib/sops/age/keys.txt";
