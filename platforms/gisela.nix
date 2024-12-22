@@ -6,6 +6,7 @@
   boot.initrd.availableKernelModules =
     [ "xhci_pci" "virtio_pci" "virtio_scsi" "usbhid" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
+  boot.kernel.sysctl = { "vm.overcommit_memory" = 1; };
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 

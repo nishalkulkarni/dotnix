@@ -7,11 +7,31 @@ let
   mlDataLocation = "/var/lib/immich/mldata";
 
   dbLocation = "/var/lib/immich/db/postgres";
+  dbHostname = "immich_postgres";
   dbName = "immich";
   dbUsername = "postgres";
-  dbPassword = "postgres"; # Change to random password, used internally
+  dbPassword = builtins.readFile config.sops.secrets.immich_postgres_pass.path;
+
+  redistHostname = "immich_redis";
 in {
   config = {
+    systemd.services.init-filerun-network-and-files = {
+      description = "Create the network bridge for Immich.";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "oneshot";
+      script = let dockercli = "${config.virtualisation.docker.package}/bin/docker";
+              in ''
+                # immich-net network
+                check=$(${dockercli} network ls | grep "immich-net" || true)
+                if [ -z "$check" ]; then
+                  ${dockercli} network create immich-net
+                else
+                  echo "immich-net already exists in docker"
+                fi
+              '';
+    };
+
     virtualisation.oci-containers = {
       backend = "docker";
       containers = {
@@ -24,15 +44,17 @@ in {
             "/etc/localtime:/etc/localtime:ro"
           ];
           dependsOn = [ "immich_redis" "immich_postgres" ];
+          extraOptions = [ "--network=immich-net" ];
           environment = {
             TZ = timezone;
             IMMICH_VERSION = immichVersion;
             UPLOAD_LOCATION = uploadLocation;
             DB_DATA_LOCATION = dbLocation;
+            DB_HOSTNAME = dbHostname;
             DB_DATABASE_NAME = dbName;
             DB_USERNAME = dbUsername;
             DB_PASSWORD = dbPassword;
-	    REDIS_HOSTNAME = "immich_redis";
+	          REDIS_HOSTNAME = redistHostname;
           };
         };
 
@@ -42,6 +64,7 @@ in {
           volumes = [
             "${mlDataLocation}/model-cache:/cache"
           ];
+          extraOptions = [ "--network=immich-net" ];
           environment = {
             IMMICH_VERSION = immichVersion;
           };
@@ -50,15 +73,17 @@ in {
         immich_redis = {
           autoStart = true;
           image = "redis:6.2-alpine";
+          extraOptions = [ "--network=immich-net" ];
         };
 
         immich_postgres = {
           autoStart = true;
           image = "tensorchord/pgvecto-rs:pg14-v0.2.0";
+          extraOptions = [ "--network=immich-net" ];
           environment = {
-            POSTGRES_PASSWORD = "${dbPassword}";
-            POSTGRES_USER = "${dbUsername}";
-            POSTGRES_DB = "${dbName}";
+            POSTGRES_PASSWORD = dbPassword;
+            POSTGRES_USER = dbUsername;
+            POSTGRES_DB = dbName;
             POSTGRES_INITDB_ARGS = "--data-checksums";
           };
           volumes = [
@@ -78,7 +103,7 @@ in {
       };
     };
 
-    networking.firewall.allowedTCPPorts = [ 2283 ];
-    networking.firewall.allowedUDPPorts = [ 2283 ];
+    networking.firewall.allowedTCPPorts = [ 2283 3003 ];
+    networking.firewall.allowedUDPPorts = [ 2283 3003 ];
   };
 }

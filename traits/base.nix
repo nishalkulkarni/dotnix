@@ -39,7 +39,10 @@
     sops = {
       defaultSopsFile = ../secrets/secrets.yaml;
       age.keyFile = "/var/lib/sops/age/keys.txt";
-      secrets = { cloud_backup_device = { }; };
+      secrets = {
+        cloud_backup_device = { };
+        immich_postgres_pass = { };
+      };
     };
 
     home-manager.useGlobalPkgs = true;
