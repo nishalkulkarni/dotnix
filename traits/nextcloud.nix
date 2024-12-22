@@ -2,7 +2,7 @@
 
 {
   config = {
-    services.nginx.virtualHosts."nc.hs.nishalkulkarni.com" = {
+    services.nginx.virtualHosts."nc.nishalkulkarni.com" = {
       extraConfig = ''
         client_max_body_size 50000M;
       '';
@@ -19,7 +19,7 @@
       containers = {
         nextcloud-aio-mastercontainer = {
           image = "nextcloud/all-in-one:latest";
-          autoStart = true;
+          autoStart = false;
           ports = [ "30451:30451" ];
           volumes = [
             "nextcloud_aio_mastercontainer:/mnt/docker-aio-config"

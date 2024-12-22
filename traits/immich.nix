@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  immichHost = "immich.hs.nishalkulkarni.com";
+  immichHost = "immich.nishalkulkarni.com";
   immichVersion = "release";
   timezone = "Europe/Berlin";
   uploadLocation = "/mnt/storage/immich/library";
@@ -75,6 +75,7 @@ in {
         immich_machine_learning = {
           autoStart = true;
           image = "ghcr.io/immich-app/immich-machine-learning:${immichVersion}";
+          ports = [ "3003:3003" ];
           volumes = [
             "${mlDataLocation}/model-cache:/cache"
           ];
@@ -116,8 +117,5 @@ in {
 
       };
     };
-
-    networking.firewall.allowedTCPPorts = [ 2283 3003 ];
-    networking.firewall.allowedUDPPorts = [ 2283 3003 ];
   };
 }

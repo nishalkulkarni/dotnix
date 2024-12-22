@@ -11,8 +11,8 @@
 
     # Open ports in the firewall.
     networking.firewall.enable = true;
-    networking.firewall.allowedTCPPorts = [ 22 ];
-    networking.firewall.allowedUDPPorts = [ 22 ];
+    networking.firewall.allowedTCPPorts = [ 22 80 443 ];
+    networking.firewall.allowedUDPPorts = [ 22 80 443 ];
 
     # Configure network proxy if necessary
     # networking.proxy.default = "http://user:password@proxy:port/";
