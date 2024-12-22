@@ -71,7 +71,7 @@
         gisela = nixpkgs.lib.nixosSystem {
           inherit (aarch64Base) system;
           modules = aarch64Base.modules
-            ++ [ platforms.gisela traits.vps traits.nextcloud users.nishal ];
+            ++ [ platforms.gisela traits.vps traits.nextcloud traits.immich users.nishal ];
         };
         # Raspberry Pi Image
         rPiImage = nixpkgs.lib.nixosSystem {
@@ -103,6 +103,7 @@
         traits.base = ./traits/base.nix;
         traits.gamestation = ./traits/gamestation.nix;
         traits.gnome = ./traits/gnome.nix;
+        traits.immich = ./traits/immich.nix;
         traits.nextcloud = ./traits/nextcloud.nix;
         traits.vps = ./traits/vps.nix;
         traits.workstation = ./traits/workstation.nix;

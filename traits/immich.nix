@@ -1,71 +1,84 @@
 { config, pkgs, ... }:
 
-{
+let
+  immichVersion = "release";
+  timezone = "Europe/Berlin";
+  uploadLocation = "/mnt/storage/immich/library";
+  mlDataLocation = "/var/lib/immich/mldata";
+
+  dbLocation = "/var/lib/immich/db/postgres";
+  dbName = "immich";
+  dbUsername = "postgres";
+  dbPassword = "postgres"; # Change to random password, used internally
+in {
   config = {
     virtualisation.oci-containers = {
       backend = "docker";
       containers = {
         immich_server = {
           autoStart = true;
-          image = "ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}";
+          image = "ghcr.io/immich-app/immich-server:${immichVersion}";
           ports = [ "2283:2283" ];
           volumes = [
-            "${UPLOAD_LOCATION}:/usr/src/app/upload"
+            "${uploadLocation}:/usr/src/app/upload"
             "/etc/localtime:/etc/localtime:ro"
           ];
           dependsOn = [ "immich_redis" "immich_postgres" ];
           environment = {
-            TZ = "Europe/Berlin";
-            IMMICH_VERSION = "release";
-            UPLOAD_LOCATION = "/mnt/storage/immich/library";
-            DB_DATA_LOCATION = "$HOME/DB/postgres";
-            DB_PASSWORD = "postgres"; # Change to random password, used internally
-            DB_USERNAME = "postgres";
-            DB_DATABASE_NAME = "immich";
+            TZ = timezone;
+            IMMICH_VERSION = immichVersion;
+            UPLOAD_LOCATION = uploadLocation;
+            DB_DATA_LOCATION = dbLocation;
+            DB_DATABASE_NAME = dbName;
+            DB_USERNAME = dbUsername;
+            DB_PASSWORD = dbPassword;
+	    REDIS_HOSTNAME = "immich_redis";
           };
         };
 
         immich_machine_learning = {
           autoStart = true;
-          image = "ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}";
+          image = "ghcr.io/immich-app/immich-machine-learning:${immichVersion}";
           volumes = [
-            "model-cache:/cache"
+            "${mlDataLocation}/model-cache:/cache"
           ];
           environment = {
-            IMMICH_VERSION = "release";
+            IMMICH_VERSION = immichVersion;
           };
         };
 
         immich_redis = {
           autoStart = true;
           image = "redis:6.2-alpine";
-          ports = [ "6379:6379" ];
         };
 
         immich_postgres = {
           autoStart = true;
           image = "tensorchord/pgvecto-rs:pg14-v0.2.0";
           environment = {
-            POSTGRES_PASSWORD = "${DB_PASSWORD}";
-            POSTGRES_USER = "${DB_USERNAME}";
-            POSTGRES_DB = "${DB_DATABASE_NAME}";
+            POSTGRES_PASSWORD = "${dbPassword}";
+            POSTGRES_USER = "${dbUsername}";
+            POSTGRES_DB = "${dbName}";
             POSTGRES_INITDB_ARGS = "--data-checksums";
           };
           volumes = [
-            "${DB_DATA_LOCATION}:/var/lib/postgresql/data"
+            "${dbLocation}:/var/lib/postgresql/data"
           ];
           cmd = [
             "postgres"
-            "-c shared_preload_libraries=vectors.so"
-            "-c 'search_path=\"$$user\", public, vectors'"
-            "-c logging_collector=on"
-            "-c max_wal_size=2GB"
-            "-c shared_buffers=512MB"
-            "-c wal_compression=on"
+            "-c" "shared_preload_libraries=vectors.so"
+            "-c" "search_path=\"$$user\", public, vectors"
+            "-c" "logging_collector=on"
+            "-c" "max_wal_size=2GB"
+            "-c" "shared_buffers=512MB"
+            "-c" "wal_compression=on"
           ];
         };
 
       };
     };
+
+    networking.firewall.allowedTCPPorts = [ 2283 ];
+    networking.firewall.allowedUDPPorts = [ 2283 ];
   };
 }
