@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 
 let
+  immichHost = "immich.hs.nishalkulkarni.com";
   immichVersion = "release";
   timezone = "Europe/Berlin";
   uploadLocation = "/mnt/storage/immich/library";
@@ -15,6 +16,19 @@ let
   redistHostname = "immich_redis";
 in {
   config = {
+    services.nginx.virtualHosts."${immichHost}" = {
+      extraConfig = ''
+        ## Per https://immich.app/docs/administration/reverse-proxy
+        client_max_body_size 50000M;
+      '';
+      forceSSL = true;
+      enableACME = true;
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:2283";
+        proxyWebsockets = true;
+      };
+    };
+
     systemd.services.init-filerun-network-and-files = {
       description = "Create the network bridge for Immich.";
       after = [ "network.target" ];

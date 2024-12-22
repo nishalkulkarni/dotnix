@@ -27,6 +27,13 @@
       settings.PermitRootLogin = "no";
     };
 
+    # Enable Nginx
+    services.nginx.enable = true;
+    security.acme = {
+      acceptTerms = true;
+      defaults.email = "me@nishalkulkarni.com";
+    };
+
     # Setup passwordless sudo
     security.sudo.wheelNeedsPassword = false;
 
