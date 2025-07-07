@@ -42,6 +42,8 @@
       secrets = {
         cloud_backup_device = { };
         immich_postgres_pass = { };
+        paperless_postgres_pass = { };
+        paperless_secret_key = { };
       };
     };
 
