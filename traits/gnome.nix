@@ -10,13 +10,13 @@
     services.xserver.desktopManager.gnome.enable = true;
 
     environment.systemPackages = with pkgs; [
+      dconf-editor
       gnomeExtensions.appindicator
-      gnome.dconf-editor
-      gnome.gnome-tweaks
-      gnome.gnome-software
+      gnome-tweaks
+      gnome-software
     ];
 
-    services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
+    services.udev.packages = with pkgs; [ gnome-settings-daemon ];
 
     programs.dconf.enable = true;
   };

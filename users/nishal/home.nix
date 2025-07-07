@@ -17,7 +17,7 @@
     enableCompletion = true;
     syntaxHighlighting.enable = true;
 
-    initExtra = ''
+    initContent = ''
       export PATH="$PATH:$HOME/Projects/scripts"
     '';
 
