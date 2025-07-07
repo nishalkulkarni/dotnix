@@ -58,7 +58,7 @@ in {
             "/etc/localtime:/etc/localtime:ro"
           ];
           dependsOn = [ "immich_redis" "immich_postgres" ];
-          extraOptions = [ "--network=immich-net" ];
+          extraOptions = [ "--network=immich-net" "--pull=always" ];
           environment = {
             TZ = timezone;
             IMMICH_VERSION = immichVersion;
