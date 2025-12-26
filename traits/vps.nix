@@ -34,6 +34,9 @@
       defaults.email = "me@nishalkulkarni.com";
     };
 
+    # Enable Tailscale
+    services.tailscale.enable = true;
+
     # Setup passwordless sudo
     security.sudo.wheelNeedsPassword = false;
 
