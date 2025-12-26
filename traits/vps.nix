@@ -11,8 +11,16 @@
 
     # Open ports in the firewall.
     networking.firewall.enable = true;
-    networking.firewall.allowedTCPPorts = [ 22 80 443 ];
-    networking.firewall.allowedUDPPorts = [ 22 80 443 ];
+    networking.firewall.allowedTCPPorts = [
+      22
+      80
+      443
+    ];
+    networking.firewall.allowedUDPPorts = [
+      22
+      80
+      443
+    ];
 
     # Configure network proxy if necessary
     # networking.proxy.default = "http://user:password@proxy:port/";
@@ -45,12 +53,21 @@
     fileSystems."/mnt/storage" = {
       device = builtins.readFile config.sops.secrets.cloud_backup_device.path;
       fsType = "cifs";
-      options = let
-        # this line prevents hanging on network split
-        automount_opts =
-          "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      options =
+        let
+          # this line prevents hanging on network split
+          automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
-      in [ "${automount_opts},credentials=/etc/nixos/smb-secrets,rw,mfsymlinks,seal,uid=33,gid=0,file_mode=0770,dir_mode=0770" ];
+        in
+        [
+          "${automount_opts},credentials=/etc/nixos/smb-secrets,rw,mfsymlinks,seal,uid=33,gid=0,file_mode=0770,dir_mode=0770"
+        ];
     };
+
+    # Limit log storage
+    services.journald.extraConfig = ''
+      MaxRetentionSec=3day
+      SystemKeepFree=500M
+    '';
   };
 }
