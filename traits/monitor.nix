@@ -3,6 +3,7 @@
 let
   grafanaHost = "grafana.nishalkulkarni.com";
   grafanaPort = 7139;
+  prometheusPort = 9001;
 in
 {
   config = {
@@ -14,6 +15,29 @@ in
         proxyWebsockets = true;
         recommendedProxySettings = true;
       };
+    };
+
+    services.prometheus = {
+      enable = true;
+      port = prometheusPort;
+      exporters = {
+        node = {
+          enable = true;
+          enabledCollectors = [ "systemd" ];
+          port = 9002;
+        };
+      };
+      scrapeConfigs = [
+        {
+          job_name = "scraper";
+          static_configs = [
+            {
+              targets = [ "127.0.0.1:${toString config.services.prometheus.exporters.node.port}" ];
+            }
+          ];
+        }
+      ];
+
     };
 
     services.grafana = {
