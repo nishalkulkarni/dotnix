@@ -64,6 +64,7 @@
             traits.workstation
             traits.gnome
             traits.gamestation
+            traits.mediastation
             users.nishal
           ];
         };
@@ -71,7 +72,7 @@
         gisela = nixpkgs.lib.nixosSystem {
           inherit (aarch64Base) system;
           modules = aarch64Base.modules
-            ++ [ platforms.gisela traits.vps traits.monitor traits.immich traits.paperless users.nishal ];
+            ++ [ platforms.gisela traits.vps traits.docker traits.monitor traits.immich traits.paperless users.nishal ];
         };
         # Raspberry Pi Image
         rPiImage = nixpkgs.lib.nixosSystem {
@@ -101,9 +102,11 @@
         platforms.rpi =
           "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix";
         traits.base = ./traits/base.nix;
+        traits.docker = ./traits/docker.nix;
         traits.gamestation = ./traits/gamestation.nix;
         traits.gnome = ./traits/gnome.nix;
         traits.immich = ./traits/immich.nix;
+        traits.mediastation = ./traits/mediastation.nix;
         traits.monitor = ./traits/monitor.nix;
         traits.nextcloud = ./traits/nextcloud.nix;
         traits.paperless = ./traits/paperless.nix;

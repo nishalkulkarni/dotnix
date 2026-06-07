@@ -34,6 +34,16 @@
     nix-direnv.enable = true;
   };
 
+  programs.git = {
+    enable = true;
+    userName = "Nishal Kulkarni";
+    userEmail = "nishalkulkarni@gmail.com";
+    extraConfig = {
+      init.defaultBranch = "main";
+      pull.rebase = true;
+    };
+  };
+
   programs.home-manager.enable = true;
 
   home.stateVersion = "23.05";

@@ -22,7 +22,6 @@
 
     environment.systemPackages = with pkgs; [
       curl
-      git
       htop
       neofetch
       pciutils
