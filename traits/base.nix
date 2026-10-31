@@ -23,7 +23,7 @@
     environment.systemPackages = with pkgs; [
       curl
       htop
-      neofetch
+      fastfetch
       pciutils
       tmux
       tree

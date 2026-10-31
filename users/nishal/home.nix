@@ -36,9 +36,11 @@
 
   programs.git = {
     enable = true;
-    userName = "Nishal Kulkarni";
-    userEmail = "nishalkulkarni@gmail.com";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Nishal Kulkarni";
+        email = "nishalkulkarni@gmail.com";
+      };
       init.defaultBranch = "main";
       pull.rebase = true;
     };
