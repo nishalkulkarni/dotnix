@@ -123,7 +123,7 @@ in {
 
         "${tika}" = {
           autoStart = true;
-          image = "ghcr.io/paperless-ngx/tika:latest";
+          image = "docker.io/apache/tika:latest";
           extraOptions = [ "--network=${webServer}" "--pull=always" ];
         };
       };
