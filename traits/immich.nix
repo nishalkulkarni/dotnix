@@ -94,7 +94,7 @@ in {
 
         immich_postgres = {
           autoStart = true;
-          image = "tensorchord/pgvecto-rs:pg14-v0.2.0";
+          image = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0";
           extraOptions = [ "--network=immich-net" ];
           environment = {
             POSTGRES_PASSWORD = dbPassword;
@@ -104,15 +104,6 @@ in {
           };
           volumes = [
             "${dbLocation}:/var/lib/postgresql/data"
-          ];
-          cmd = [
-            "postgres"
-            "-c" "shared_preload_libraries=vectors.so"
-            "-c" "search_path=\"$$user\", public, vectors"
-            "-c" "logging_collector=on"
-            "-c" "max_wal_size=2GB"
-            "-c" "shared_buffers=512MB"
-            "-c" "wal_compression=on"
           ];
         };
 
